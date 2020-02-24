@@ -2,18 +2,24 @@
 {% block content %}
     <div class="container">
         <div class="jumbotron">
-            <img src="{{ movie.poster.url }}" class="img-responsive" alt="Cinque Terre" width="140" height="155">
-            {{ movie.name }}
-
+        <div class="row1">
+            <img src="{{ movie.poster.url }}" class="img-responsive" alt="Cinque Terre" width="140" >
         </div>
-
-
-        <div id="carouselExampleIndicators" class="carousel slide " style="width: 400px; height: 100%  margin: 0 auto" data-ride="carousel">
+        <div class="row2">
+             <strong>  {{ movie.name }}</strong>
+        </div>
+        <div class="row1">
+            <h4>Описание:</h4> <strong> {{ movie.description }}</strong>
+            <div class="row1"><br> <strong>Жанр: {{ movie.category }}</strong></div>
+        <strong>Год выпуска : {{ movie.year }}</strong>
+<div class="row1">
+       <br> <div id="carouselExampleIndicators" class="carousel slide " style="width: 400px; height: 100%  margin: 0 auto" data-ride="carousel">
             <ol class="carousel-indicators">
                 <li data-target="" data-ride="carousel" class="active"></li>
                 <li data-target="" data-ride="carousel"></li>
                 <li data-target="" data-ride="carousel"></li>
             </ol>
+    <h4>Отрывки фильма:</h4>
             <div class="carousel-inner">
                 {% for image in movie.images_set.all %}
                     {% if forloop.first %}
@@ -41,6 +47,9 @@
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="sr-only">Next</span>
             </a>
+</div>
+        </div>
+
         </div>
 
 
