@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load static %}
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'css/bg.css' %}"/>
+    {% block csss %}
+    {% endblock %}
+
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <img src="../media/bg.png"  width="30" height="30">
+    <a class="navbar-brand" href="{% url 'home' %}">MovieClub</a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    {% if request.user.is_superuser %}
+        <a href="{% url 'create' %}" class="btn btn-warning">Добавить Фильм</a>
+        </div>
+    {% endif %}
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+
+            </li>
+        </ul>
+        {% if user.is_authenticated %}
+            <ul>
+
+                {% else %}
+                <a href="{% url 'register' %}" class="btn btn-warning">Регистрация</a>
+
+                <a href="{% url 'login' %}" class="btn btn-warning">Логин</a>
+            </ul>
+        {% endif %}
+        {% if user.is_authenticated %}
+            <ul>
+                <a href="{% url 'profile' %}" class="btn btn-warning">Профиль</a>
+            </ul>
+        {% endif %}
+    </div>
+    {% if request.user.is_superuser %}
+        <p class="text-warning">Admin:</p>
+        <p class="text-white">{{ user.username }}</p>
+    {% else %}
+
+        <p class="text-white">{{ user.username }}</p>
+    {% endif %}
+
+</nav>
+
+{% block content %}
+{% endblock %}
+</body>
+</html>

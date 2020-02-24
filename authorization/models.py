@@ -1,0 +1,11 @@
+from django.db import models
+from django.contrib.auth.models import AbstractUser
+
+
+class User(AbstractUser):
+    image = models.ImageField(default='default.jpg', upload_to='profile_pics')
+    money = models.PositiveIntegerField(blank=True, null=True)
+
+
+
+
