@@ -31,6 +31,5 @@
 >>Не залогиненый пользователь, видит список, может его отсортировать, не может 
  
 >>По ресту, добавить возможность получения информации о всех сеансах на сегодня, которые начинаются в определённый промежуток времени и\или идут в конкретном зале. 
- 
- 
-![screenshot of sample](https://memepedia.ru/wp-content/uploads/2016/03/large_p19d7nh1hm1i37tnuim11ebqo5c1.jpg)
+
+>>>>>>>>>>><img src="https://memepedia.ru/wp-content/uploads/2016/03/large_p19d7nh1hm1i37tnuim11ebqo5c1.jpg" alt="Your image title" width="400"/>
