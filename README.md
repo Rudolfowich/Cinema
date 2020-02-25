@@ -1,6 +1,4 @@
-body{
-background
-}
+
 
 # Cinema Site
 
