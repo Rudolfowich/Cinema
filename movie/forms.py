@@ -21,3 +21,7 @@ class SessionForm(ModelForm):
         )
 
 
+class ImageReview(MovieForm):
+    class Meta:
+        model = Images
+        fields = 'image', 'movie'
