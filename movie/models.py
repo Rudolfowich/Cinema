@@ -16,6 +16,7 @@ class Movie(models.Model):
     poster = models.ImageField(verbose_name="Постер", upload_to='image')
     year = models.PositiveIntegerField(verbose_name="Дата выхода", default=2020)
     url = models.SlugField(max_length=130, unique=True)
+    youtube = models.URLField(default="https://www.youtube.com/embed/49s0cTx2C4M", null=True)
 
     def __str__(self):
         return f"{self.name}"

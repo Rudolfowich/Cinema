@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.views.generic import CreateView, DeleteView, ListView, DetailView
 from django.views.generic.base import View
 from .models import Movie, Session, Images
-from .forms import MovieForm
+from .forms import MovieForm, SessionForm
 
 
 class MovieView(ListView):
@@ -23,15 +23,22 @@ class MovieCreate(CreateView, LoginRequiredMixin):
 
     def dispatch(self, request, *args, **kwargs):
         if (not request.user.is_authenticated) or (not request.user.is_superuser):
-                return self.handle_no_permission()
+            return self.handle_no_permission()
         return super().dispatch(request, *args, **kwargs)
 
 
 class CreateSession(CreateView, LoginRequiredMixin):
     model = Session
     template_name = 'movie/create_session.html'
+    form_class = SessionForm
     http_method_names = ['post', 'get']
     success_url = '/'
+    login_url = '/login'
+
+    def dispatch(self, request, *args, **kwargs):
+        if (not request.user.is_authenticated) or (not request.user.is_superuser):
+            return self.handle_no_permission()
+        return super().dispatch(request, *args, **kwargs)
 
 
 class MovieDetail(ListView):
@@ -44,6 +51,3 @@ class MovieDetail(ListView):
 class MoviePhoto(DetailView):
     model = Images
     slug_field = "url"
-
-
-
