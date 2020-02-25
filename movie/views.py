@@ -5,8 +5,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import CreateView, DeleteView, ListView, DetailView
 from django.views.generic.base import View
-from .models import Movie, Session, Images
-from .forms import MovieForm, SessionForm, ImageReview
+from .models import Movie, Session, Images, MovieRoom
+from .forms import MovieForm, SessionForm, ImageReview, MovieSizeForm
 
 
 class MovieView(ListView):
@@ -57,4 +57,11 @@ class MovieReviewCreate(CreateView):
     model = Images
     form_class = ImageReview
     template_name = 'movie/createReview.html'
+    success_url = '/'
+
+
+class MovieRoomCreate(CreateView):
+    model = MovieRoom
+    form_class = MovieSizeForm
+    template_name = 'movie/create_room.html'
     success_url = '/'
