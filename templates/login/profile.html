@@ -16,9 +16,10 @@
 
          </div>
         </div>
-        <br> <h2 class="account-headig">Username : {{ user.username }}</h2>
+        <h2 class="account-headig">Full Name : {{ user.first_name }} {{ user.last_name }}</h2>
+         <h2 class="account-headig">Username : {{ user.username }}</h2>
          <h2 class="account-headig">Email : {{ user.email }}</h2>
-        <h3> Cash : {{ user.money }}$</h3>
+        <h3> Cash : {{ user.money }} UAN</h3>
          </div>
         <a href="{% url 'logout' %}" class="btn btn-warning">Выйти</a>
         </div>

@@ -23,11 +23,8 @@ class Movie(models.Model):
 
 
 class Images(models.Model):
-    movie = models.ForeignKey(Movie, verbose_name='Фильм', default=None, on_delete=models.CASCADE)
+    movie = models.ForeignKey(Movie, verbose_name='Фильм', on_delete=models.CASCADE)
     image = models.ImageField(upload_to="review/", blank=True)
-
-    def __str__(self):
-        return f"{self.movie.name}"
 
 
 class Session(models.Model):

@@ -1,6 +1,6 @@
 from django.forms import ModelForm, DateInput, TimeInput, DateTimeInput
 from django import forms
-from movie.models import Movie,Session
+from movie.models import Movie, Session, Images
 
 
 class MovieForm(forms.ModelForm):
@@ -19,3 +19,5 @@ class SessionForm(ModelForm):
             'end',
             'price',
         )
+
+

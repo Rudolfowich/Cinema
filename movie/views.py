@@ -51,3 +51,16 @@ class MovieDetail(ListView):
 class MoviePhoto(DetailView):
     model = Images
     slug_field = "url"
+
+
+class MovieReviewCreate(CreateView, LoginRequiredMixin):
+    model = Images
+    template_name = 'movie/createReview.html'
+    http_method_names = ['post', 'get']
+    success_url = '/'
+    login_url = '/login'
+
+    def dispatch(self, request, *args, **kwargs):
+        if (not request.user.is_authenticated) or (not request.user.is_superuser):
+            return self.handle_no_permission()
+        return super().dispatch(request, *args, **kwargs)
