@@ -19,6 +19,7 @@ class SessionForm(forms.ModelForm):
             'start',
             'end',
             'price',
+            'places',
         )
         widgets = {
             'start': DateInput(format='%d/%m/%Y', attrs={

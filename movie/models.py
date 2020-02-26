@@ -38,6 +38,7 @@ class Session(models.Model):
     start = models.DateTimeField(verbose_name='Когда начинаем сеанс')
     end = models.DateTimeField(verbose_name='Окончание сеанса')
     price = models.PositiveIntegerField(verbose_name='Цена')
+    places = models.PositiveIntegerField(blank=True, null=True)
 
     class Meta:
         ordering = ['-start', ]
@@ -47,8 +48,8 @@ class Session(models.Model):
 
 
 class Ticket(models.Model):
-    quantity = models.IntegerField(null=True)
-    session = models.ForeignKey(Session, on_delete=models.CASCADE)
+    quantity = models.IntegerField(verbose_name='Количество', null=False)
+    session = models.ForeignKey(Session, verbose_name="На какой фильм?", on_delete=models.CASCADE)
     user = models.ForeignKey('authorization.User', on_delete=models.CASCADE)
 
     def __str__(self):

@@ -1,11 +1,9 @@
 {% extends "login/../base.html" %}
 {% block content %}
     <div class="container">
-    <div class="jumbotron">
-    {% for session in view.get_price %} <br>{{ session.price }} {% endfor %}
-     {% for session in view.get_date %} <br>{{ session.start }} {% endfor %}
-    </div>
         {% for session in  session_list %}
+
+
             <div class="jumbotron">
                 <img src="{{ session.movie.poster.url }}" style="width: 150px">
                 <h4>{{ session.name }}

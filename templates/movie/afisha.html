@@ -5,10 +5,30 @@
     <link rel="stylesheet" href="{% static 'css/bg.css' %}"/>
 {% endblock %}
 {% block content %}
-
-    <p></p>
+    {% if user.is_authenticated %}
     <div class="container">
+    <div class="jumbotron">
+
+            <form action="{% url 'filter' %}" method="get">
+            <strong>Жанр: </strong>
+                {% for movie in movie_list %}
+            {% if not forloop.first %}
+                    {{ movie.category }}
+                    {% endif %}
+      <input type="checkbox" class="checked" name="category" value="{{ movie.category }}">
+    {% endfor %}<button type="submit">Найти</button></form><div class="jumbotron">
+                <form action="{% url 'filter' %}" method="get">
+            <strong>Год: </strong>
+                {% for movie in movie_list %}
+            {% if not forloop.first %}
+                    {{ movie.year }}
+                    {% endif %}
+      <input type="checkbox" class="checked" name="category" value="{{ movie.year }}">
+
+    {% endfor %}<button type="submit">Найти</button></form>
+   {% endif %} </div></div>
         {% for movie in  movie_list %}
+            <div class="container">
             <div class="jumbotron">
                 <div class="row">
                     <div class="col col-lg-2">
@@ -21,7 +41,7 @@
                 <strong>Жанр ({{ movie.category }}) </strong></p>
                 <strong>Год выпуска {{ movie.year }}</strong>
 
-
+            </div>
             </div>
         {% endfor %}
     </div>

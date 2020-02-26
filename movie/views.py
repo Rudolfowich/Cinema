@@ -2,17 +2,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from django.views.generic import CreateView, DeleteView, ListView, DetailView
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DeleteView, ListView, DetailView, UpdateView
 from .models import Movie, Session, Images, MovieRoom, Ticket
 from .forms import MovieForm, SessionForm, ImageReview, MovieSizeForm, TicketForm
-
-
-class MovieView(ListView):
-    paginate_by = 3
-
-    def get(self, request, **kwargs):
-        movies = Movie.objects.all()
-        return render(request, "movie/afisha.html", {"movie_list": movies})
 
 
 class MovieCreate(CreateView, LoginRequiredMixin):
@@ -71,17 +64,32 @@ class MovieRoomCreate(CreateView, LoginRequiredMixin):
     success_url = '/'
 
 
-class DateMoney:
-    def get_price(self):
-        return Session.objects.values('price')
-
-    def get_date(self):
-        return Session.objects.values('start')
-
-
-class SessionList(DateMoney, ListView):
+class SessionList(ListView):
     model = Session
     template_name = 'movie/session_list.html'
+
+
+class GenreYear:
+    """Жанры и года выхода фильмов"""
+
+    def get_category(self):
+        return Movie.objects.values("category")
+
+    def get_years(self):
+        return Movie.objects.values("year")
+
+
+class MovieView(GenreYear, ListView):
+    model = Movie
+    queryset = Movie.objects.all()
+    template_name = 'movie/afisha.html'
+
+
+class FilterSessionView(GenreYear, ListView):
+    def get_queryset(self):
+        queryset = Movie.objects.filter(category__in=self.request.GET.getlist("category"),
+                                        year__in=self.request.GET.getlist("year"))
+        return queryset
 
 
 class BuyTicket(CreateView, LoginRequiredMixin):
@@ -121,3 +129,25 @@ class PurchasesListView(ListView):
 
     def get_queryset(self):
         return Ticket.objects.filter(user=self.request.user)
+
+
+class DeleteSession(DeleteView):
+    model = Session
+    template_name = 'movie/DeleteSession.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if (not request.user.is_authenticated) or (not request.user.is_superuser):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
+
+class UpdateSession(UpdateView):
+    model = Session
+    form_class = SessionForm
+    template_name = 'movie/session_update.html'
+    success_url = reverse_lazy('/')
+
+    def dispatch(self, request, *args, **kwargs):
+        if (not request.user.is_authenticated) or (not request.user.is_superuser):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
