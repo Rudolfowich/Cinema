@@ -1,6 +1,7 @@
 from urllib import request
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import CreateView, DeleteView, ListView, DetailView
@@ -9,7 +10,9 @@ from .models import Movie, Session, Images, MovieRoom
 from .forms import MovieForm, SessionForm, ImageReview, MovieSizeForm
 
 
+
 class MovieView(ListView):
+    paginate_by = 3
     def get(self, request):
         movies = Movie.objects.all()
         return render(request, "movie/afisha.html", {"movie_list": movies})
@@ -53,15 +56,22 @@ class MoviePhoto(DetailView):
     slug_field = "url"
 
 
-class MovieReviewCreate(CreateView):
+class MovieReviewCreate(CreateView, LoginRequiredMixin):
     model = Images
     form_class = ImageReview
     template_name = 'movie/createReview.html'
     success_url = '/'
 
+    def dispatch(self, request, *args, **kwargs):
+        if (not request.user.is_authenticated) or (not request.user.is_superuser):
+            raise PermissionDenied("Не лезь блядь!")
+        return super().dispatch(request, *args, **kwargs)
 
-class MovieRoomCreate(CreateView):
+
+class MovieRoomCreate(CreateView, LoginRequiredMixin):
     model = MovieRoom
     form_class = MovieSizeForm
     template_name = 'movie/create_room.html'
     success_url = '/'
+
+

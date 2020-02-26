@@ -10,4 +10,9 @@
 </form>
         </div>
         </div>
+    {% if exception %}
+  <p>{{ exception }}</p>
+{% else %}
+  <p>Static generic message</p>
+{% endif %}
 {% endblock %}

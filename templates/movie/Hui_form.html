@@ -1,0 +1,14 @@
+{% extends "login/../base.html" %}
+{% block content %}
+    <div class="container">
+        <div class="jumbotron">
+            <form action=" {% url 'hui' %} " method="post">
+                <div class="container">
+                    <div class="jumbotron"><h3>Добавление hui</h3><br>
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <input type="submit" value="create">
+            </form>
+        </div>
+    </div>
+{% endblock %}

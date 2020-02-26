@@ -24,7 +24,10 @@ class Movie(models.Model):
 
 class Images(models.Model):
     movie = models.ForeignKey(Movie, verbose_name='Фильм', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to="review/", blank=True)
+    image = models.ImageField(upload_to="review/")
+
+    def __str__(self):
+        return f"{self.movie.name}"
 
 
 class Session(models.Model):
@@ -44,3 +47,5 @@ class MovieRoom(models.Model):
 
     def __str__(self):
         return f"{self.room_name} - {self.room_size}"
+
+

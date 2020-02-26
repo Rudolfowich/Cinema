@@ -1,9 +1,12 @@
+
 {% extends "login/../base.html" %}
 {% block csss %}
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/bg.css' %}"/>
 {% endblock %}
 {% block content %}
+
+    <p></p>
     <div class="container">
         {% for movie in  movie_list %}
             <div class="jumbotron">

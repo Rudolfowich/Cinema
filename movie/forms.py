@@ -21,13 +21,14 @@ class SessionForm(ModelForm):
         )
 
 
-class ImageReview(MovieForm):
+class ImageReview(ModelForm):
     class Meta:
         model = Images
         fields = 'image', 'movie'
 
 
-class MovieSizeForm(MovieForm):
+class MovieSizeForm(ModelForm):
     class Meta:
         model = MovieRoom
         fields = 'room_name', 'room_size'
+
