@@ -1,5 +1,7 @@
 from django.db import models
 
+from authorization.models import User
+
 
 class Movie(models.Model):
     Category = [
@@ -31,14 +33,27 @@ class Images(models.Model):
 
 
 class Session(models.Model):
-    name = models.ForeignKey('Movie', on_delete=models.CASCADE)
+    name = models.CharField(verbose_name='Название сеанса', max_length=200)
+    movie = models.ForeignKey('Movie', on_delete=models.CASCADE)
     room_name = models.ForeignKey('MovieRoom', verbose_name="Название зала", on_delete=models.CASCADE)
     start = models.DateTimeField(verbose_name='Когда начинаем сеанс')
     end = models.DateTimeField(verbose_name='Окончание сеанса')
     price = models.PositiveIntegerField(verbose_name='Цена')
 
+    class Meta:
+        ordering = ['-start', ]
+
     def __str__(self):
         return f"{self.name}"
+
+
+class Ticket(models.Model):
+    quantity = models.IntegerField(null=True)
+    session = models.ForeignKey(Session, on_delete=models.CASCADE)
+    user = models.ForeignKey('authorization.User', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.session}'
 
 
 class MovieRoom(models.Model):
@@ -47,5 +62,3 @@ class MovieRoom(models.Model):
 
     def __str__(self):
         return f"{self.room_name} - {self.room_size}"
-
-

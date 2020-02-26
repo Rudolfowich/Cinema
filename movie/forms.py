@@ -1,5 +1,6 @@
-from django.forms import ModelForm, DateInput, TimeInput, DateTimeInput
 from django import forms
+from django.forms import ModelForm, DateInput, DateTimeInput, MultiWidget
+
 from movie.models import Movie, Session, Images, MovieRoom
 
 
@@ -9,16 +10,23 @@ class MovieForm(forms.ModelForm):
         fields = ['name', 'description', 'category', 'poster', 'year', 'url', 'youtube']
 
 
-class SessionForm(ModelForm):
+class SessionForm(forms.ModelForm, MultiWidget):
     class Meta:
         model = Session
         fields = (
             'name',
+            'movie',
             'room_name',
             'start',
             'end',
             'price',
         )
+        widgets = {
+            'start': DateInput(format='%d/%m/%Y', attrs={
+                'class': 'form-control', 'placeholder': 'Select a date', 'type': 'date'}),
+            'end': DateInput(format='%d/%m/%Y', attrs={
+                'class': 'form-control', 'placeholder': 'Select a date', 'type': 'date'}),
+        }
 
 
 class ImageReview(ModelForm):
@@ -31,4 +39,3 @@ class MovieSizeForm(ModelForm):
     class Meta:
         model = MovieRoom
         fields = 'room_name', 'room_size'
-

@@ -10,9 +10,9 @@ from .models import Movie, Session, Images, MovieRoom
 from .forms import MovieForm, SessionForm, ImageReview, MovieSizeForm
 
 
-
 class MovieView(ListView):
     paginate_by = 3
+
     def get(self, request):
         movies = Movie.objects.all()
         return render(request, "movie/afisha.html", {"movie_list": movies})
@@ -75,3 +75,14 @@ class MovieRoomCreate(CreateView, LoginRequiredMixin):
     success_url = '/'
 
 
+class DateMoney:
+    def get_price(self):
+        return Session.objects.values('price')
+
+    def get_date(self):
+        return Session.objects.values('start')
+
+
+class SessionList(DateMoney, ListView):
+    model = Session
+    template_name = 'movie/session_list.html'

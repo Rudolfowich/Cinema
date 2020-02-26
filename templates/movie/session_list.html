@@ -1,0 +1,22 @@
+{% extends "login/../base.html" %}
+{% block content %}
+    <div class="container">
+    <div class="jumbotron">
+    {% for session in view.get_price %} <br>{{ session.price }} {% endfor %}
+     {% for session in view.get_date %} <br>{{ session.start }} {% endfor %}
+    </div>
+        {% for session in  session_list %}
+            <div class="jumbotron">
+                <img src="{{ session.movie.poster.url }}" style="width: 150px">
+                <h4>{{ session.name }}
+                    <br> Фильм {{ session.movie }}
+                    <br> Начало {{ session.start }}
+                    <br> Конец {{ session.end }}
+                    <br> Стоимость: {{ session.price }}
+                    <br> В зале : {{ session.room_name }}
+                    <br> Осталось мест {{ session.room_name.room_size }}
+                    <br> Подробно о фильме
+                </h4>
+            </div>
+        {% endfor %}
+{% endblock %}
