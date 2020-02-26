@@ -33,7 +33,6 @@ class Images(models.Model):
 
 
 class Session(models.Model):
-    name = models.CharField(verbose_name='Название сеанса', max_length=200)
     movie = models.ForeignKey('Movie', on_delete=models.CASCADE)
     room_name = models.ForeignKey('MovieRoom', verbose_name="Название зала", on_delete=models.CASCADE)
     start = models.DateTimeField(verbose_name='Когда начинаем сеанс')
@@ -44,7 +43,7 @@ class Session(models.Model):
         ordering = ['-start', ]
 
     def __str__(self):
-        return f"{self.name}"
+        return f"{self.movie.name}"
 
 
 class Ticket(models.Model):

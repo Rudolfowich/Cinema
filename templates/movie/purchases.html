@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <div class="jumbotron">
+{% for ticket in tickets %}
+    <form action="">
+    {{ ticket.session.movie }} - {{ ticket.quantity }}
+    </form>
+{% endfor %}
+
+        </div>
+    </div>
+{% endblock %}

@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm, DateInput, DateTimeInput, MultiWidget
 
-from movie.models import Movie, Session, Images, MovieRoom
+from movie.models import Movie, Session, Images, MovieRoom, Ticket
 
 
 class MovieForm(forms.ModelForm):
@@ -10,11 +10,10 @@ class MovieForm(forms.ModelForm):
         fields = ['name', 'description', 'category', 'poster', 'year', 'url', 'youtube']
 
 
-class SessionForm(forms.ModelForm, MultiWidget):
+class SessionForm(forms.ModelForm):
     class Meta:
         model = Session
         fields = (
-            'name',
             'movie',
             'room_name',
             'start',
@@ -39,3 +38,10 @@ class MovieSizeForm(ModelForm):
     class Meta:
         model = MovieRoom
         fields = 'room_name', 'room_size'
+
+
+class TicketForm(ModelForm):
+    class Meta:
+        model = Ticket
+        fields = (
+            'quantity', 'session')
