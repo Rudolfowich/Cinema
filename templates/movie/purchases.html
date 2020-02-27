@@ -2,9 +2,11 @@
 {% block content %}
     <div class="container">
         <div class="jumbotron">
+        <strong>Всего куплено на:  </strong>{{ user.sum_all }} грн
 {% for ticket in tickets %}
     <form action="">
-    {{ ticket.session.movie }} - {{ ticket.quantity }}
+        <strong> Покупка:</strong>  {{ ticket.session.movie }}<br><strong> В количестве</strong> {{ ticket.quantity }}
+
     </form>
 {% endfor %}
 

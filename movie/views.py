@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
+from django.db.models import Sum
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -63,6 +64,11 @@ class MovieRoomCreate(CreateView, LoginRequiredMixin):
     template_name = 'movie/create_room.html'
     success_url = '/'
 
+    def dispatch(self, request, *args, **kwargs):
+        if (not request.user.is_authenticated) or (not request.user.is_superuser):
+            raise PermissionDenied()
+        return super().dispatch(request, *args, **kwargs)
+
 
 class SessionList(ListView):
     model = Session
@@ -70,7 +76,6 @@ class SessionList(ListView):
 
 
 class GenreYear:
-    """Жанры и года выхода фильмов"""
 
     def get_category(self):
         return Movie.objects.values("category")
@@ -94,30 +99,32 @@ class FilterSessionView(GenreYear, ListView):
 
 class BuyTicket(CreateView, LoginRequiredMixin):
     model = Ticket
-    http_method_names = ['post', 'get']
-    success_url = '/'
-    template_name = 'movie/buy_ticket.html'
     form_class = TicketForm
+    http_method_names = ['post', 'get']
+    template_name = 'movie/buy_ticket.html'
     session = None
-
-    login_url = '/authenticate/login/'
+    success_url = '/'
 
     def form_valid(self, form):
         obj = form.save(commit=False)
-        session_from_form = form.data['session']
-        movie_from_session = Session.objects.get(id=session_from_form)
-        movie_cost = movie_from_session.price
-        ticket_quantity = int(form.data['quantity'])
-        user_bil = movie_cost * ticket_quantity
-        if int(self.request.user.money) < int(user_bil):
-            return HttpResponse('You dont have money!')
-        self.request.user.money -= user_bil
-        self.request.user.save()
+        session_form = form.data['session']
+        movie_session = Session.objects.get(id=session_form)
+        quantity = int(form.data['quantity'])
+        cost = movie_session.price * quantity
+        show_purchases = int(self.request.user.sum_all)
+        if int(self.request.user.money) < int(cost):
+            return HttpResponse('Не хватает бабулетов')
+        else:
+            self.request.user.money -= cost
+            self.request.user.sum_all += cost
+            self.request.user.save()
         obj.user = self.request.user
-        obj.session = movie_from_session
-        cinema_name = movie_from_session.room_name
-        cinema_name.room_size -= ticket_quantity
-        cinema_name.save()
+        obj.session = movie_session
+        movie_room = movie_session.room_name
+        movie_room.room_size -= quantity
+        if int(movie_room.room_size <= -1):
+            return HttpResponse('Увы закончились места')
+        movie_room.save()
         obj.save()
         return HttpResponseRedirect('/')
 
@@ -131,6 +138,11 @@ class PurchasesListView(ListView):
         return Ticket.objects.filter(user=self.request.user)
 
 
+class ListDeleteSession(ListView):
+    model = Session
+    template_name = 'movie/DeleteSession.html'
+
+
 class DeleteSession(DeleteView):
     model = Session
     template_name = 'movie/DeleteSession.html'
@@ -140,14 +152,29 @@ class DeleteSession(DeleteView):
             raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
 
+    # def get(self, request, *args, **kwargs):
+    #     self.object = self.get_object()
+    #     context = self.get_context_data(object=self.object)
+    #     if self.object.movie_room.size < self.object.places:
+    #         return HttpResponse('Unable to change')
+    #             """Нужно тестировать"""
+
 
 class UpdateSession(UpdateView):
     model = Session
     form_class = SessionForm
     template_name = 'movie/session_update.html'
-    success_url = reverse_lazy('/')
+    success_url = reverse_lazy('sessialister')
 
     def dispatch(self, request, *args, **kwargs):
         if (not request.user.is_authenticated) or (not request.user.is_superuser):
             raise PermissionDenied()
         return super().dispatch(request, *args, **kwargs)
+
+    # def form_valid(self, form):
+    #     places = int(form.data['places'])
+    #     comparison_room = int(form.data['movie_room'])
+    #     next_comparion = Session.objects.get(movie_room=places)
+    #     if next_comparion.movie_room.size < places:
+    #         raise PermissionDenied()
+    #         """Нужно тестировать"""
