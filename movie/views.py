@@ -1,12 +1,48 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
-from django.db.models import Sum
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, ListView, DetailView, UpdateView
+from rest_framework import viewsets, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from authorization.models import User
+from .API.serializers import UserSerializer, MovieSerializer, MovieRoomSerializer, SessionSerializer
 from .models import Movie, Session, Images, MovieRoom, Ticket
 from .forms import MovieForm, SessionForm, ImageReview, MovieSizeForm, TicketForm
+from rest_framework import permissions
+from rest_framework import viewsets
+
+
+class MovieViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
+class SessionViewSet(viewsets.ModelViewSet):
+    queryset = Session.objects.all()
+    serializer_class = SessionSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+class MovieViewSet(viewsets.ModelViewSet):
+    queryset = Movie.objects.all()
+    serializer_class = MovieSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+class MovieRoomViewSet(viewsets.ModelViewSet):
+    queryset = MovieRoom.objects.all()
+    serializer_class = MovieRoomSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
 class MovieCreate(CreateView, LoginRequiredMixin):

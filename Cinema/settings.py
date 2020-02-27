@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'authorization.apps.AuthorizationConfig',
     'crispy_forms',
     'movie',
+    'rest_framework',
 
 ]
 
@@ -112,6 +113,11 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+REST_FRAMEWORK = {'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination', 'PAGE_SIZE': 10,
+                  'DEFAULT_PERMISSION_CLASSES': [
+                      'rest_framework.permissions.IsAuthenticated',
+                  ]}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
