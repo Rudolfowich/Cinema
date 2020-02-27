@@ -1,0 +1,30 @@
+{% extends "login/../base.html" %}
+{% block content %}
+    {% load crispy_forms_tags %}
+     <div class="container">
+         <br> <a href="{% url 'home' %}" class="btn btn-warning">Назад</a>
+    <div class="jumbotron">
+
+<div class="container-section">
+
+    <div class="media">
+
+<img class="rounded-circle account-img" src="{{ user.image.url }}" style="width:100px;height:110px;>
+
+             <div class="mediabody">
+<div class="mediabody">
+
+         </div>
+        </div>
+        <h2 class="account-headig">Full Name : {{ user.first_name }} {{ user.last_name }}</h2>
+         <h2 class="account-headig">Username : {{ user.username }}</h2>
+         <h2 class="account-headig">Email : {{ user.email }}</h2>
+        <h3> Cash : {{ user.money }} UAN</h3>
+         </div>
+        <a href="{% url 'logout' %}" class="btn btn-warning">Выйти</a>
+        </div>
+
+</div>
+
+</div>
+{% endblock %}

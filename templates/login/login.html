@@ -1,0 +1,35 @@
+{% extends "login/../base.html" %}
+{% block csss %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/bg.css' %}"/>
+
+{% endblock %}
+{% block content %}
+    <img src="static/brand.img">
+    <div class="container">
+        <div class="jumbotron">
+            {% if user.is_authenticated %}
+                Logged, {{ user.username }}
+                <br>    <a href="{% url "logout" %}?next=/">Выйти</a>
+            {% else %}
+                <h1>Войти</h1>
+                <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    <table>
+                        <tr>
+
+                            <td>{{ form.username.label_tag }}</td>
+                            <td>{{ form.username }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ form.password.label_tag }}</td>
+                            <td>{{ form.password }}</td>
+                        </tr>
+                    </table>
+                    <input type="submit" value="login">
+
+                </form>
+                </div>
+                </div>
+            {% endif %}
+{% endblock %}

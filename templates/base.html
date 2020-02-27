@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load static %}
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'css/bg.css' %}"/>
+    {% block csss %}
+    {% endblock %}
+    <style>
+        {% block style %}
+        {% endblock %}
+
+        .col-md-7 {
+            position: relative;
+            width: 100%;
+            padding-right: 0px;
+            padding-left: 0px;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <img src="../media/bg.png" width="30" height="30">
+    <a class="navbar-brand" href="{% url 'home' %}">MovieClub</a>
+    <a href='{% url 'sessialister' %}' type="button" class="btn btn-light">Сеансы</a>
+
+{% if user.is_authenticated %}
+    <div class="col-md-2"><a href='{% url 'buy_ticket' %}' type="button" class="btn btn-light">Купить билет</a></div>
+{% endif %}
+
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            </li>
+        </ul>
+        {% if not user.is_authenticated %}<a href="{% url 'register' %}" class="btn btn-warning">Регистрация</a>
+            <a href="{% url 'login' %}" class="btn btn-warning">Логин</a>
+
+            </ul>
+        {% endif %}
+        {% if request.user.is_superuser %}
+            <div class="col-md-2"><a class="text-white">Баланс:<a class="text-warning"> {{ user.money }} грн</a></a>
+            </div>{% endif %}
+        <div class="row">
+            <div class="col-md-7">
+                {% if request.user.is_superuser %}
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false">
+                            Панель Администратора
+                        </button>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="{% url 'create' %}">Добавить Фильм</a>
+                            <a class="dropdown-item" href="{% url 'movieReview' %}">Добавить Картинки</a>
+                            <a class="dropdown-item" href="{% url 'MovieRoomCreate' %}">Добавить зал</a>
+                            <a class="dropdown-item" href="{% url 'create_session' %}">Добавить Сеанс</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="delete_session">Удалить Сеанс</a>
+                            <a class="dropdown-item" href="#">Удалить Фильм</a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col">
+                {% if user.is_authenticated %}
+                    {% if not user.is_superuser %}
+                        <a class="text-white">Баланс:<a class="text-warning"> {{ user.money }} грн</a></a>{% endif %}
+                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        {% if request.user.is_superuser %}
+                            <a class="text-warning">Admin: {{ user.username }}</a>
+                        {% else %}
+                            <a class="text-warning">User: {{ user.username }}</a>
+                        {% endif %}
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" href="{% url 'profile' %}">Профиль</a>
+                        <a class="dropdown-item" href="{% url 'purchases' %}">Покупки</a>
+                        <a class="dropdown-item" href="#">Сменить пароль/Скоро</a>
+                        <a class="dropdown-item" href="{% url 'logout' %}">Выйти</a>
+                    </div>
+                    </div>
+                {% endif %}
+        </div>
+    </div>
+</nav>
+{% block content %}
+{% endblock %}
+</body>
+</html>
